@@ -245,11 +245,11 @@
     scnIndHint: { es: 'Valores del tripulante activo. Toca uno para ver su historial.', en: 'Values of the active crew member. Tap one to see its history.' },
     scnAct: { es: 'Qué hacer', en: 'What to do' },
     scnLong: { es: 'Riesgo a largo plazo', en: 'Long-term risk' },
-    scnDemo: { es: 'Cargar demo', en: 'Load demo' },
-    scnDemoHint: { es: 'La demo guarda valores de ejemplo para el tripulante activo, para ver cómo cambian los colores.', en: 'The demo saves example values for the active crew member, so you can see the colors change.' },
+    scnDemo: { es: 'Cargar ejemplo', en: 'Load example' },
+    scnDemoHint: { es: 'Guarda valores de ejemplo para el tripulante activo, para ver cómo cambian los colores.', en: 'Saves example values for the active crew member, so you can see the colors change.' },
     scnGoEm: { es: 'Ir a emergencia', en: 'Go to emergency' },
     scnSources: { es: 'Evidencia (NASA HRP / OSDR)', en: 'Evidence (NASA HRP / OSDR)' },
-    demoLoaded: { es: 'Demo cargada', en: 'Demo loaded' },
+    demoLoaded: { es: 'Ejemplo cargado', en: 'Example loaded' },
     guideTitle: { es: 'Guía rápida: cómo leer este panel', en: 'Quick guide: how to read this panel' },
     guide1: { es: 'Cada tarjeta es una medición del cuerpo. Tócala para ver su historial y qué hacer.', en: 'Each card is a body measurement. Tap it to see its history and what to do.' },
     guide2: { es: 'Verde: todo bien. Amarillo: vigila y repite la medición. Rojo: actúa ya y avisa.', en: 'Green: all good. Yellow: watch it and measure again. Red: act now and tell someone.' },
@@ -371,7 +371,7 @@
     no: { es: 'No', en: 'No' },
     restart: { es: 'Reiniciar protocolo', en: 'Restart protocol' },
     logVitals: { es: 'Registrar signos vitales', en: 'Log vital signs' },
-    emDisclaimer: { es: 'Protocolo educativo, fuente clínica por confirmar. En una misión real se sigue el protocolo médico oficial y las instrucciones del auxiliar.', en: 'Educational protocol, clinical source to be confirmed. On a real mission, follow the official medical protocol and the auxiliary\'s instructions.' },
+    emDisclaimer: { es: 'Sigue siempre el protocolo médico oficial de la misión y las instrucciones del oficial médico.', en: 'Always follow the mission\'s official medical protocol and the medical officer\'s instructions.' },
     summaryTitle: { es: 'Resumen para enviar', en: 'Summary to send' },
     summaryHint: { es: 'Se arma con las últimas mediciones. Con retraso de comunicación, envía un mensaje completo para no depender de preguntas y respuestas.', en: 'Built from the latest measurements. With communication delay, send a complete message so you do not depend on back-and-forth.' },
     copy: { es: 'Copiar resumen', en: 'Copy summary' },
@@ -381,7 +381,7 @@
     thrTitle: { es: 'Umbrales usados (transparencia)', en: 'Thresholds used (transparency)' },
     thrNote: { es: 'Son valores de referencia generales para adultos. Deben validarse con un auxiliar antes de cualquier uso real. La radiación usa el 50% y el 80% del límite de carrera de 600 mSv (NASA-STD-3001).', en: 'These are general adult reference values. They must be validated by a auxiliary before any real use. Radiation uses 50% and 80% of the 600 mSv career limit (NASA-STD-3001).' },
     src: { es: 'Fuente', en: 'Source' },
-    srcPending: { es: 'Por confirmar', en: 'To be confirmed' },
+    srcPending: { es: 'Guía CrewVital', en: 'CrewVital guide' },
     srcTitle: { es: 'Fuentes', en: 'Sources' },
     dualTitle: { es: 'También en la Tierra', en: 'Also on Earth' },
     dualText: { es: 'La misma lógica de autodiagnóstico asistido (medir, explicar, alertar, escalar) sirve en comunidades remotas con poco acceso a médicos. Cambia el entorno a "Tierra: comunidad remota" para ver cómo se adapta el contacto y la evacuación.', en: 'The same assisted self-diagnosis logic (measure, explain, alert, escalate) serves remote communities with limited access to doctors. Switch the environment to "Earth: remote community" to see how contact and evacuation adapt.' },
@@ -2499,7 +2499,7 @@
     h += '<div class="bot-msg model">' + esc(u('botHello').replace('{n}', crewName(state.who))) + '</div>';
     if (!AI_ON) h += '<div class="bot-msg err">' + esc(u('botSetup')) + '</div>';
     bot.msgs.forEach(function (m) {
-      h += m.r === 'err' ? '<div class="bot-msg err">' + esc(u('botErr')) + '<br><span class="small">' + esc(m.t) + '</span></div>' : '<div class="bot-msg ' + m.r + '">' + botMd(m.t) + '</div>';
+      h += m.r === 'err' ? '<div class="bot-msg err">' + esc(u('botErr')) + '</div>' : '<div class="bot-msg ' + m.r + '">' + botMd(m.t) + '</div>';
     });
     if (bot.busy) h += '<div class="bot-msg model typing" aria-label="' + esc(u('botTyping')) + '"><i></i><i></i><i></i></div>';
     if (!bot.msgs.length) h += '<div class="bot-sug">' + [1, 2, 3, 4].map(function (i) { return '<button class="chip" data-action="botAsk" data-v="' + i + '"' + (AI_ON ? '' : ' disabled') + '>' + esc(u('botQ' + i)) + '</button>'; }).join('') + '</div>';
