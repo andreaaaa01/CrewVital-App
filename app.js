@@ -1852,7 +1852,7 @@
   });
   document.addEventListener('keydown', function (ev) {
     var t = ev.target;
-    if ((ev.key === 'Enter' || ev.key === ' ') && t.getAttribute && t.getAttribute('data-action') === 'dgRegion' && t.tagName.toLowerCase() === 'g') { ev.preventDefault(); onAction(t); }
+    if ((ev.key === 'Enter' || ev.key === ' ') && t.getAttribute && t.getAttribute('data-action') === 'dgRegion' && t.tagName.toLowerCase() === 'g') { ev.preventDefault(); onAction(t); pushLoc(); }
     if (ev.key === 'Escape' && menuOpen) { setMenu(false); }
   });
   document.addEventListener('change', function (ev) {
