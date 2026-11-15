@@ -1746,7 +1746,7 @@
     if (navRestoring || !window.history || !history.pushState) return;
     var l = navLoc(), cur = history.state && history.state.cv;
     if (cur && JSON.stringify(cur) === JSON.stringify(l)) return;
-    if (history.state.dlg && !$('dlg').open) { history.replaceState({ cv: l }, '', locUrl()); return; }
+    if (history.state && history.state.dlg && !$('dlg').open) { history.replaceState({ cv: l }, '', locUrl()); return; }
     history.pushState({ cv: l }, '', locUrl());
   }
   function applyLoc(l) {
