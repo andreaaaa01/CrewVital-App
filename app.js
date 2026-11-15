@@ -1751,7 +1751,7 @@
   function applyLoc(l) {
     var role = l.role;
     if (state.lock) role = 'crew';
-    state.role = role; state.tab = TABS.indexOf(l.tab) >= 0 ? l.tab : homeTab();
+    state.role = role; state.tab = TABS.indexOf(l.tab) >= 0 && !(l.tab === 'medic' && role !== 'medic') ? l.tab : homeTab();
     state.dg = { mode: l.dg ? l.dg.mode : null, region: l.dg ? l.dg.region : null };
     state.sel = l.sel; state.region = l.region; state.medMode = l.medMode;
     state.em = { sc: l.em ? l.em.sc : null, node: l.em ? l.em.node : null };
