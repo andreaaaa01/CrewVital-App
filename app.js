@@ -177,8 +177,8 @@
     botTabLog: { es: 'Mi registro', en: 'My log' },
     botLogHint: { es: 'Resúmenes de tus conversaciones con Kibo. El oficial médico también puede verlos.', en: 'Summaries of your conversations with Kibo. The medical officer can also see them.' },
     botTyping: { es: 'Kibo está escribiendo', en: 'Kibo is typing' },
-    botErr: { es: 'No pude responder ahora. Revisa la conexión e inténtalo de nuevo.', en: 'I could not answer right now. Check the connection and try again.' },
-    botSetup: { es: 'El asistente aún no está activado. Falta poner la dirección del servidor de Kibo en config.js (instrucciones en ASISTENTE.md).', en: 'The assistant is not enabled yet. The Kibo server address is missing in config.js (instructions in ASISTENTE.md).' },
+    botErr: { es: 'Kibo no responde ahora. El resto de la app sigue funcionando.', en: 'Kibo is not responding right now. The rest of the app keeps working.' },
+    botSetup: { es: 'Kibo no responde ahora. El resto de la app sigue funcionando.', en: 'Kibo is not responding right now. The rest of the app keeps working.' },
     botTimeout: { es: 'El servidor tardó más de 60 segundos en responder.', en: 'The server took more than 60 seconds to answer.' },
     botNoNet: { es: 'No se pudo conectar con el servidor de Kibo. Revisa la dirección en config.js y que el Worker esté desplegado.', en: 'Could not reach the Kibo server. Check the address in config.js and that the Worker is deployed.' },
     botSaved: { es: 'Kibo guardó el resumen de la conversación', en: 'Kibo saved the conversation summary' },
@@ -245,11 +245,11 @@
     scnIndHint: { es: 'Valores del tripulante activo. Toca uno para ver su historial.', en: 'Values of the active crew member. Tap one to see its history.' },
     scnAct: { es: 'Qué hacer', en: 'What to do' },
     scnLong: { es: 'Riesgo a largo plazo', en: 'Long-term risk' },
-    scnDemo: { es: 'Cargar demo', en: 'Load demo' },
-    scnDemoHint: { es: 'La demo guarda valores de ejemplo para el tripulante activo, para ver cómo cambian los colores.', en: 'The demo saves example values for the active crew member, so you can see the colors change.' },
+    scnDemo: { es: 'Cargar ejemplo', en: 'Load example' },
+    scnDemoHint: { es: 'Guarda valores de ejemplo para el tripulante activo, para ver cómo cambian los colores.', en: 'Saves example values for the active crew member, so you can see the colors change.' },
     scnGoEm: { es: 'Ir a emergencia', en: 'Go to emergency' },
     scnSources: { es: 'Evidencia (NASA HRP / OSDR)', en: 'Evidence (NASA HRP / OSDR)' },
-    demoLoaded: { es: 'Demo cargada', en: 'Demo loaded' },
+    demoLoaded: { es: 'Ejemplo cargado', en: 'Example loaded' },
     guideTitle: { es: 'Guía rápida: cómo leer este panel', en: 'Quick guide: how to read this panel' },
     guide1: { es: 'Cada tarjeta es una medición del cuerpo. Tócala para ver su historial y qué hacer.', en: 'Each card is a body measurement. Tap it to see its history and what to do.' },
     guide2: { es: 'Verde: todo bien. Amarillo: vigila y repite la medición. Rojo: actúa ya y avisa.', en: 'Green: all good. Yellow: watch it and measure again. Red: act now and tell someone.' },
@@ -371,7 +371,7 @@
     no: { es: 'No', en: 'No' },
     restart: { es: 'Reiniciar protocolo', en: 'Restart protocol' },
     logVitals: { es: 'Registrar signos vitales', en: 'Log vital signs' },
-    emDisclaimer: { es: 'Protocolo educativo, fuente clínica por confirmar. En una misión real se sigue el protocolo médico oficial y las instrucciones del auxiliar.', en: 'Educational protocol, clinical source to be confirmed. On a real mission, follow the official medical protocol and the auxiliary\'s instructions.' },
+    emDisclaimer: { es: 'Sigue siempre el protocolo médico oficial de la misión y las instrucciones del oficial médico.', en: 'Always follow the mission\'s official medical protocol and the medical officer\'s instructions.' },
     summaryTitle: { es: 'Resumen para enviar', en: 'Summary to send' },
     summaryHint: { es: 'Se arma con las últimas mediciones. Con retraso de comunicación, envía un mensaje completo para no depender de preguntas y respuestas.', en: 'Built from the latest measurements. With communication delay, send a complete message so you do not depend on back-and-forth.' },
     copy: { es: 'Copiar resumen', en: 'Copy summary' },
@@ -381,7 +381,7 @@
     thrTitle: { es: 'Umbrales usados (transparencia)', en: 'Thresholds used (transparency)' },
     thrNote: { es: 'Son valores de referencia generales para adultos. Deben validarse con un auxiliar antes de cualquier uso real. La radiación usa el 50% y el 80% del límite de carrera de 600 mSv (NASA-STD-3001).', en: 'These are general adult reference values. They must be validated by a auxiliary before any real use. Radiation uses 50% and 80% of the 600 mSv career limit (NASA-STD-3001).' },
     src: { es: 'Fuente', en: 'Source' },
-    srcPending: { es: 'Por confirmar', en: 'To be confirmed' },
+    srcPending: { es: 'Guía CrewVital', en: 'CrewVital guide' },
     srcTitle: { es: 'Fuentes', en: 'Sources' },
     dualTitle: { es: 'También en la Tierra', en: 'Also on Earth' },
     dualText: { es: 'La misma lógica de autodiagnóstico asistido (medir, explicar, alertar, escalar) sirve en comunidades remotas con poco acceso a médicos. Cambia el entorno a "Tierra: comunidad remota" para ver cómo se adapta el contacto y la evacuación.', en: 'The same assisted self-diagnosis logic (measure, explain, alert, escalate) serves remote communities with limited access to doctors. Switch the environment to "Earth: remote community" to see how contact and evacuation adapt.' },
@@ -847,7 +847,11 @@
     }
     h += '<div class="row" style="margin-top:1rem"><button class="btn primary" data-action="measureInd" data-v="' + id + '">' + esc(u('measureNow')) + '</button><button class="btn" data-action="closeDlg">' + esc(u('close')) + '</button></div>';
     var dlg = $('dlg'); dlg.innerHTML = h;
-    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+    dlgOpen(dlg);
+  }
+  function dlgOpen(dlg) {
+    if (dlg.showModal) { if (!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+    if (!(history.state && history.state.dlg)) history.pushState({ cv: navLoc(), dlg: 1 }, '', location.href);
   }
   function closeDlg() { var d = $('dlg'); if (d.open) { if (d.close) { d.close(); } else { d.removeAttribute('open'); } } }
   function rangeText(f) {
@@ -1027,7 +1031,7 @@
     if (worst === 2) h += '<p><button class="btn danger" data-action="sos">' + esc(u('openEm')) + '</button></p>';
     h += '<div class="row" style="justify-content:flex-end;margin-top:1rem"><button class="btn" data-action="closeDlg">' + esc(u('dgFinBack')) + '</button><button class="btn primary" data-action="dgFinishGo">' + esc(u('dgFinConfirm')) + '</button></div></div>';
     var dlg = $('dlg'); dlg.innerHTML = h;
-    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+    dlgOpen(dlg);
   }
   function measureForm(ind) {
     var h = '<form class="box dg-form" id="mform" novalidate><p class="small muted">' + esc(u('dgZone')) + ': ' + esc(T(REGIONS[ind.region].name)) + '</p><h3>' + esc(T(ind.name)) + '</h3>';
@@ -1544,7 +1548,7 @@
     var dlg = $('dlg');
     dlg.innerHTML = '<div class="nm"><h2>' + esc(u('newMission')) + '</h2><p>' + esc(u(SYNC_ON ? 'nmTextSync' : 'nmText')) + '</p><div class="row"><button class="btn" data-action="pdf" data-v="all">' + esc(u('reportPdfAll')) + '</button></div>' +
       '<label class="chk"><input type="checkbox" id="nmCrew" checked> ' + esc(u('nmCrew')) + '</label><div class="row" style="justify-content:flex-end;margin-top:1rem"><button class="btn" data-action="closeDlg">' + esc(u('cancel')) + '</button><button class="btn danger" data-action="nmGo">' + esc(u('nmConfirm')) + '</button></div></div>';
-    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+    dlgOpen(dlg);
   }
   function newMission() {
     var c = $('nmCrew'), resetCrew = !c || c.checked, d = defaults();
@@ -1734,6 +1738,37 @@
     else if (t === 'settings') renderSettings();
     else renderScience();
   }
+  /* ---------- boton Atras del navegador (history.state) ---------- */
+  var navRestoring = false, navSkip = false;
+  function navLoc() { return { role: state.role || null, tab: state.tab, dg: { mode: state.dg.mode, region: state.dg.region }, sel: state.sel || null, region: state.region || null, medMode: state.medMode || null, em: { sc: state.em.sc, node: state.em.node } }; }
+  function locUrl() { return location.pathname + location.search + '#/' + (state.role ? state.tab : 'rol'); }
+  function pushLoc() {
+    if (navRestoring || !window.history || !history.pushState) return;
+    var l = navLoc(), cur = history.state && history.state.cv;
+    if (cur && JSON.stringify(cur) === JSON.stringify(l)) return;
+    if (history.state && history.state.dlg && !$('dlg').open) { history.replaceState({ cv: l }, '', locUrl()); return; }
+    history.pushState({ cv: l }, '', locUrl());
+  }
+  function applyLoc(l) {
+    var role = l.role;
+    if (state.lock) role = 'crew';
+    state.role = role; state.tab = TABS.indexOf(l.tab) >= 0 && !(l.tab === 'medic' && role !== 'medic') ? l.tab : homeTab();
+    state.dg = { mode: l.dg ? l.dg.mode : null, region: l.dg ? l.dg.region : null };
+    state.sel = l.sel; state.region = l.region; state.medMode = l.medMode;
+    state.em = { sc: l.em ? l.em.sc : null, node: l.em ? l.em.node : null };
+    lastResult = null;
+    if (menuOpen) setMenu(false, true);
+    save(); navRestoring = true; render(); navRestoring = false; window.scrollTo(0, 0);
+  }
+  window.addEventListener('popstate', function (ev) {
+    if (navSkip) { navSkip = false; return; }
+    var d = $('dlg');
+    if (d && d.open) { navRestoring = true; closeDlg(); navRestoring = false; return; }
+    if (ev.state && ev.state.cv) applyLoc(ev.state.cv);
+  });
+  $('dlg').addEventListener('close', function () {
+    if (!navRestoring && history.state && history.state.dlg) { navSkip = true; history.back(); }
+  });
   function go(tab) {
     if (tab === 'body' || tab === 'measure') tab = 'diag';
     state.tab = tab; save();
@@ -1813,11 +1848,11 @@
   }
   document.addEventListener('click', function (ev) {
     var el = ev.target.closest ? ev.target.closest('[data-action]') : null;
-    if (el) { onAction(el); }
+    if (el) { onAction(el); pushLoc(); }
   });
   document.addEventListener('keydown', function (ev) {
     var t = ev.target;
-    if ((ev.key === 'Enter' || ev.key === ' ') && t.getAttribute && t.getAttribute('data-action') === 'dgRegion' && t.tagName.toLowerCase() === 'g') { ev.preventDefault(); onAction(t); }
+    if ((ev.key === 'Enter' || ev.key === ' ') && t.getAttribute && t.getAttribute('data-action') === 'dgRegion' && t.tagName.toLowerCase() === 'g') { ev.preventDefault(); onAction(t); pushLoc(); }
     if (ev.key === 'Escape' && menuOpen) { setMenu(false); }
   });
   document.addEventListener('change', function (ev) {
@@ -2464,7 +2499,7 @@
     h += '<div class="bot-msg model">' + esc(u('botHello').replace('{n}', crewName(state.who))) + '</div>';
     if (!AI_ON) h += '<div class="bot-msg err">' + esc(u('botSetup')) + '</div>';
     bot.msgs.forEach(function (m) {
-      h += m.r === 'err' ? '<div class="bot-msg err">' + esc(u('botErr')) + '<br><span class="small">' + esc(m.t) + '</span></div>' : '<div class="bot-msg ' + m.r + '">' + botMd(m.t) + '</div>';
+      h += m.r === 'err' ? '<div class="bot-msg err">' + esc(u('botErr')) + '</div>' : '<div class="bot-msg ' + m.r + '">' + botMd(m.t) + '</div>';
     });
     if (bot.busy) h += '<div class="bot-msg model typing" aria-label="' + esc(u('botTyping')) + '"><i></i><i></i><i></i></div>';
     if (!bot.msgs.length) h += '<div class="bot-sug">' + [1, 2, 3, 4].map(function (i) { return '<button class="chip" data-action="botAsk" data-v="' + i + '"' + (AI_ON ? '' : ' disabled') + '>' + esc(u('botQ' + i)) + '</button>'; }).join('') + '</div>';
@@ -2502,6 +2537,7 @@
   document.addEventListener('visibilitychange', function () { if (document.hidden) botSaveRecord(true); });
 
   render();
+  if (window.history && history.replaceState) history.replaceState({ cv: navLoc() }, '', locUrl());
   var shownDay = today();
   function checkDay() { if (today() !== shownDay) { shownDay = today(); render(); } }
   setInterval(checkDay, 60000);
