@@ -7,7 +7,7 @@
    Instrucciones paso a paso: SINCRONIZACION.md */
 window.CREWVITAL_SYNC = {
   databaseURL: 'https://crewvital-c2bc1-default-rtdb.firebaseio.com',
-  mission: 'mision-1'
+  mission: 'judges-2026'
 };
 
 /* Asistente Kibo (IA con Gemini).
