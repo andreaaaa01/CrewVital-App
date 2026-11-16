@@ -746,14 +746,15 @@
       return '<option value="' + esc(k) + '"' + (k === state.env ? ' selected' : '') + '>' + esc(T(ENVS[k].name)) + '</option>';
     }).join('');
     $('main').innerHTML = '<section class="role-pick"><h1>' + esc(u('roleTitle')) + '</h1><p class="muted">' + esc(u('roleHint')) + '</p>' +
-      '<p class="bigday role-day">' + esc(u('roleDayClean')) + ' <b>' + today() + '</b></p>' +
       '<div class="role-cards">' +
       ['crew', 'medic'].map(function (r) {
         return '<button class="role-card" data-action="role" data-v="' + r + '"' + (state.role === r ? ' aria-pressed="true"' : '') + '>' + roleIcon(r) + '<b>' + esc(u('role_' + r)) + '</b><span>' + esc(u('role_' + r + '_d')) + '</span></button>';
       }).join('') + '</div>' +
-      '<div class="box role-settings"><h3>' + esc(u('roleSettings')) + '</h3>' +
-      '<h4>' + esc(u('setLang')) + '</h4><div class="lang" role="group" aria-label="' + esc(u('setLang')) + '"><button data-action="lang" data-v="es" aria-pressed="' + (state.lang === 'es') + '">Español</button><button data-action="lang" data-v="en" aria-pressed="' + (state.lang === 'en') + '">English</button></div>' +
-      '<label class="f">' + esc(u('setEnv')) + '<select id="envSel" class="sel">' + envOpts + '</select></label>' +
+      '<div class="grid g-2 role-settings">' +
+      '<div class="box"><h3>' + esc(u('setMission')) + '</h3><p class="bigday">' + esc(u('roleDayClean')) + ' <b>' + today() + '</b></p><p class="small muted">' + esc(u('dayAuto')) + '</p>' + dateField() + '</div>' +
+      '<div class="box"><label class="f">' + esc(u('setEnv')) + '<select id="envSel" class="sel">' + envOpts + '</select></label>' + envContext() +
+      '<h3>' + esc(u('bgLabel')) + '</h3>' + bgSwitch() + '<p class="small muted">' + esc(u('bgHint')) + '</p>' +
+      '<h3>' + esc(u('setLang')) + '</h3><div class="lang" role="group" aria-label="' + esc(u('setLang')) + '"><button data-action="lang" data-v="es" aria-pressed="' + (state.lang === 'es') + '">Español</button><button data-action="lang" data-v="en" aria-pressed="' + (state.lang === 'en') + '">English</button></div></div>' +
       '</div></section>';
   }
   function roleIcon(r) {
