@@ -116,7 +116,9 @@
     grp_help: { es: 'Ayuda urgente', en: 'Urgent help' },
     grp_cfg: { es: 'Configuración', en: 'Configuration' },
     roleTitle: { es: '¿Quién usa CrewVital hoy?', en: 'Who is using CrewVital today?' },
-    roleHint: { es: 'Puedes cambiarlo cuando quieras en Ajustes.', en: 'You can change it anytime in Settings.' },
+    roleHint: { es: 'Elige un rol para empezar. Abajo puedes ajustar idioma y entorno. Cada visita abre la misión en el día 1, sin mediciones previas.', en: 'Choose a role to begin. Below you can set language and environment. Every visit opens the mission on day 1 with no previous measurements.' },
+    roleSettings: { es: 'Ajustes rápidos', en: 'Quick settings' },
+    roleDayClean: { es: 'Misión lista para demo · Día', en: 'Mission ready for demo · Day' },
     role_crew: { es: 'Tripulante (astronauta)', en: 'Crew member (astronaut)' },
     role_crew_d: { es: 'Revisa tu propio cuerpo paso a paso y sabe qué hacer ahora.', en: 'Check your own body step by step and know what to do now.' },
     role_medic: { es: 'Médico / oficial médico', en: 'Physician / medical officer' },
@@ -442,51 +444,42 @@
   function load() {
     var d = defaults(), s = null;
     try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) { s = null; }
-    if (!s || typeof s !== 'object') return d;
-    if (s.lang === 'es' || s.lang === 'en') d.lang = s.lang;
-    if (typeof s.env === 'string' && ENVS.hasOwnProperty(s.env)) d.env = s.env;
-    /* Cada visita al enlace vuelve a la pantalla de inicio (elegir rol).
-       Los datos de tripulacion y mediciones si se conservan. */
+    /* Cada visita al enlace: pantalla de roles, mision en dia 1 y sin mediciones.
+       Asi los jueces ven la app limpia tras la animacion de inicio. */
+    if (s && typeof s === 'object') {
+      if (s.lang === 'es' || s.lang === 'en') d.lang = s.lang;
+      if (typeof s.bg === 'boolean') d.bg = s.bg;
+      if (typeof s.dev === 'string' && /^[a-z0-9]{4,12}$/.test(s.dev)) d.dev = s.dev;
+    }
+    d.missionStart = isoDate(new Date());
     d.tab = 'dashboard';
     d.role = null;
+    d.lock = null;
     d.medMode = null;
     d.dg = { mode: null, region: null };
     d.em = { sc: null, node: null };
-    if (byId(s.sel)) d.sel = s.sel;
-    if (typeof s.bg === 'boolean') d.bg = s.bg;
-    if (s.phase === 'post') d.phase = 'post';
-    if (s.remote) d.remote = cleanSnap(s.remote);
-    if (s.note && typeof s.note.sit === 'string' && typeof s.note.steps === 'string') d.note = { sit: s.note.sit, steps: s.note.steps, ts: s.note.ts || 0 };
-    if (typeof s.guide === 'boolean') d.guide = s.guide;
-    if (typeof s.scn === 'string') d.scn = s.scn;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(s.missionStart || '')) d.missionStart = s.missionStart;
-    if (Array.isArray(s.crew)) {
-      var crew = s.crew.filter(function (c) { return c && typeof c.id === 'string' && typeof c.name === 'string' && c.name; });
-      if (crew.length) d.crew = crew;
-    }
-    d.cseq = Math.max(typeof s.cseq === 'number' ? s.cseq : 0, d.crew.reduce(function (m, c) { var n = parseInt(String(c.id).slice(1), 10); return isNaN(n) ? m : Math.max(m, n); }, 0));
-    while (d.crew.length < 4) {
-      d.cseq += 1;
-      d.crew.push({ id: 'c' + d.cseq, name: (d.lang === 'en' ? 'Crew member ' : 'Tripulante ') + d.cseq });
-    }
-    var ids = d.crew.map(function (c) { return c.id; });
-    d.who = ids.indexOf(s.who) >= 0 ? s.who : ids[0];
-    /* dispositivo bloqueado en un tripulante: entra directo como ese tripulante */
-    if (typeof s.lock === 'string' && ids.indexOf(s.lock) >= 0) { d.lock = s.lock; d.who = s.lock; d.role = 'crew'; }
-    d.seq = typeof s.seq === 'number' ? s.seq : 0;
-    if (Array.isArray(s.entries)) d.entries = s.entries.filter(function (e) { return validEntry(e, ids); });
-    /* sincronizacion: identidad del dispositivo, mision y cola de envios pendientes */
-    if (typeof s.dev === 'string' && /^[a-z0-9]{4,12}$/.test(s.dev)) d.dev = s.dev;
-    if (typeof s.mid === 'number') d.mid = s.mid;
-    d.midAuto = s.midAuto === true;
-    if (typeof s.metaTs === 'number') d.metaTs = s.metaTs;
-    d.metaDirty = s.metaDirty === true;
-    if (Array.isArray(s.out)) d.out = s.out.filter(function (x) { return typeof x === 'string'; });
-    if (Array.isArray(s.del)) d.del = s.del.filter(function (x) { return typeof x === 'string'; });
-    if (typeof s.joined === 'string') d.joined = s.joined;
-    if (Array.isArray(s.mh)) d.mh = s.mh.filter(function (r) { return validMh(r, ids); });
-    if (Array.isArray(s.mhOut)) d.mhOut = s.mhOut.filter(function (x) { return typeof x === 'string'; });
-    d.entries.forEach(function (e) { if (typeof e.id !== 'string' || !e.id) e.id = d.dev + '-' + e.ts.toString(36) + '-' + (e.seq || 0); });
+    d.phase = 'pre';
+    d.remote = null;
+    d.note = { sit: '', steps: '', ts: 0 };
+    d.entries = [];
+    d.seq = 0;
+    d.mh = [];
+    d.mhOut = [];
+    d.out = [];
+    d.del = [];
+    d.metaDirty = false;
+    d.metaTs = 0;
+    d.joined = null;
+    d.mid = 0;
+    d.midAuto = false;
+    d.crew = [1, 2, 3, 4].map(function (n) {
+      return { id: 'c' + n, name: (d.lang === 'en' ? 'Crew member ' : 'Tripulante ') + n };
+    });
+    d.cseq = 4;
+    d.who = 'c1';
+    d.env = 'transit';
+    d.guide = true;
+    d.scn = 'solar';
     return d;
   }
   function persist() { syncTouch(); try { localStorage.setItem(KEY, JSON.stringify(state)); return true; } catch (e) { return false; } }
@@ -749,10 +742,20 @@
   }
   function renderFooter() { $('foot').innerHTML = ''; }
   function renderRole() {
-    $('main').innerHTML = '<section class="role-pick"><h1>' + esc(u('roleTitle')) + '</h1><p class="muted">' + esc(u('roleHint')) + '</p><div class="role-cards">' +
+    var envOpts = Object.keys(ENVS).map(function (k) {
+      return '<option value="' + esc(k) + '"' + (k === state.env ? ' selected' : '') + '>' + esc(T(ENVS[k].name)) + '</option>';
+    }).join('');
+    $('main').innerHTML = '<section class="role-pick"><h1>' + esc(u('roleTitle')) + '</h1><p class="muted">' + esc(u('roleHint')) + '</p>' +
+      '<div class="role-cards">' +
       ['crew', 'medic'].map(function (r) {
         return '<button class="role-card" data-action="role" data-v="' + r + '"' + (state.role === r ? ' aria-pressed="true"' : '') + '>' + roleIcon(r) + '<b>' + esc(u('role_' + r)) + '</b><span>' + esc(u('role_' + r + '_d')) + '</span></button>';
-      }).join('') + '</div></section>';
+      }).join('') + '</div>' +
+      '<div class="grid g-2 role-settings">' +
+      '<div class="box"><h3>' + esc(u('setMission')) + '</h3><p class="bigday">' + esc(u('roleDayClean')) + ' <b>' + today() + '</b></p><p class="small muted">' + esc(u('dayAuto')) + '</p>' + dateField() + '</div>' +
+      '<div class="box"><label class="f">' + esc(u('setEnv')) + '<select id="envSel" class="sel">' + envOpts + '</select></label>' + envContext() +
+      '<h3>' + esc(u('bgLabel')) + '</h3>' + bgSwitch() + '<p class="small muted">' + esc(u('bgHint')) + '</p>' +
+      '<h3>' + esc(u('setLang')) + '</h3><div class="lang" role="group" aria-label="' + esc(u('setLang')) + '"><button data-action="lang" data-v="es" aria-pressed="' + (state.lang === 'es') + '">Español</button><button data-action="lang" data-v="en" aria-pressed="' + (state.lang === 'en') + '">English</button></div></div>' +
+      '</div></section>';
   }
   function roleIcon(r) {
     return '<svg class="role-ic" viewBox="0 0 48 48" aria-hidden="true">' + (r === 'crew'
